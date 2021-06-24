@@ -8,12 +8,11 @@ namespace EPlayersMVC.Controllers
     [Route("Login")]
     public class LoginController : Controller
     {
+        Jogador jogadorModel = new Jogador();
+
 
         [TempData]
         public string Mensagem {get; set;}
-
-
-        Jogador jogadorModel = new Jogador();
 
         public IActionResult Index()
         {
@@ -27,23 +26,25 @@ namespace EPlayersMVC.Controllers
 
             var logado = jogadoresCSV.Find(
                 x =>
-                x.Split(";")[3] == form ["Email"] && 
-                x.Split(";")[4] == form ["Senha"]
+                x.Split(";")[3] == form["Email"] && 
+                x.Split(";")[4] == form["Senha"]
             );
 
             if (logado != null)
             {
-                HttpContext.Session.SetString("_UserName", logado.Split(";")[1]);
+                HttpContext.Session.SetString("_UserName", logado.Split(";")[2]);
                 return LocalRedirect ("~/");
+
             }
 
-            Mensagem = "Dados incorretos, tente novamente...";
-            return LocalRedirect("~/Login");
+               Mensagem = "Dados incorretos, tente novamente...";
+               return LocalRedirect("~/Login");
 
         }
 
         [Route("Logout")]
-        public IActionResult Logout(){
+        public IActionResult Logout()
+        {
             HttpContext.Session.Remove("_UserName");
             return LocalRedirect ("~/");
         }
